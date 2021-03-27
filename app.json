@@ -1,12 +1,4 @@
 {
-  "name": "learning-react-native-flashcards",
-  "displayName": "learning-react-native-flashcards",
-  "expo": {
-    "name": "learning-react-native-flashcards",
-    "slug": "learning-react-native-flashcards",
-    "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
-  }
+  "name": "flashcards",
+  "displayName": "flashcards"
 }
