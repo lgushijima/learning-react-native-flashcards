@@ -1,112 +1,89 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, {Component} from 'react'
+import {StatusBar} from 'react-native'
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {colors} from './utils/settings'
+import {setMenuItem} from './utils/helpers'
+import {handleGetDecks} from './actions/decks'
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {NavigationContainer} from '@react-navigation/native'
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+import Loading from './components/Loading'
+import Decks from './components/Decks'
+import Settings from './components/Settings'
+import NewDeck from './components/NewDeck'
+import MenuItem from './components/MenuItem'
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+//-- redux
+import {createStore} from 'redux'
+import {Provider} from 'react-redux'
+import reducer from './reducers'
+import middleware from './middleware'
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+const store = createStore(reducer, middleware)
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+const Tabs = createBottomTabNavigator()
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+class App extends Component {
+    state = {
+        isLoading: true,
+    }
 
-export default App;
+    componentDidMount() {
+        const {dispatch} = store
+        dispatch(handleGetDecks()).then(() => {
+            this.setState(() => ({
+                isLoading: false,
+            }))
+        })
+    }
+
+    render() {
+        const menuOptions = {
+            decks: setMenuItem('Decks', 'bars', Decks),
+            newDeck: setMenuItem('New Deck', 'book', NewDeck),
+            settings: setMenuItem('Settings', 'cog', Settings),
+        }
+
+        return (
+            <Provider store={store}>
+                <NavigationContainer>
+                    <StatusBar
+                        barStyle="dark-content"
+                        backgroundColor={colors.primary}
+                        translucent={false}
+                    />
+                    {this.state.isLoading ? (
+                        <Loading />
+                    ) : (
+                        <Tabs.Navigator
+                            headerMode="none"
+                            tabBarOptions={{
+                                activeTintColor: colors.primary,
+                                inactiveTintColor: colors.gray700,
+                            }}>
+                            {Object.keys(menuOptions).map(key => {
+                                const options = menuOptions[key]
+                                return (
+                                    <Tabs.Screen
+                                        key={key}
+                                        name={options.menuName}
+                                        options={options}>
+                                        {props => (
+                                            <MenuItem
+                                                {...props}
+                                                options={options}
+                                            />
+                                        )}
+                                    </Tabs.Screen>
+                                )
+                            })}
+                        </Tabs.Navigator>
+                    )}
+                </NavigationContainer>
+            </Provider>
+        )
+    }
+}
+
+export default App
