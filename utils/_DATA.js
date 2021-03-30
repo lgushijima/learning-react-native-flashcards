@@ -32,6 +32,15 @@ function generateUID() {
     )
 }
 
+function formatDeck(name) {
+    return {
+        id: generateUID(),
+        name,
+        lastQuiz: null,
+        cards: {},
+    }
+}
+
 export function _getDecks() {
     return new Promise((res, rej) => {
         setTimeout(() => res({...decks}), 1000)
@@ -44,15 +53,16 @@ export function _getCards(deckId) {
     })
 }
 
-export function _saveDeck(deck) {
+export function _saveDeck(name) {
     return new Promise((res, rej) => {
+        const formattedDeck = formatDeck(name)
         setTimeout(() => {
             decks = {
                 ...decks,
-                [decks.id]: decks,
+                [formattedDeck.id]: formattedDeck,
             }
 
-            res()
+            res(formattedDeck)
         }, 1000)
     })
 }

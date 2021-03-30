@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet, Text, View} from 'react-native'
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native'
 
 import {colors} from '../utils/settings'
 import {formatDate} from '../utils/helpers'
@@ -8,16 +8,20 @@ export default function DeckItem({deck}) {
     const cards = Object.keys(deck.cards)
 
     return (
-        <View style={styles.deckWrapper}>
-            <View style={styles.deckLeft}>
-                <Text style={styles.deckTitle}>{deck.name}</Text>
-                <Text style={styles.deckInfo}>
-                    Last Quiz: {formatDate(deck.lastQuiz)}
-                </Text>
-            </View>
+        <TouchableOpacity onPress={() => {}}>
+            <View style={styles.deckWrapper}>
+                <View style={styles.deckLeft}>
+                    <Text style={styles.deckTitle}>{deck.name}</Text>
+                    {deck.lastQuiz !== null && (
+                        <Text style={styles.deckInfo}>
+                            Last Quiz: {formatDate(deck.lastQuiz)}
+                        </Text>
+                    )}
+                </View>
 
-            <Text style={styles.deckCardsInfo}>{cards.length} cards</Text>
-        </View>
+                <Text style={styles.deckCardsInfo}>{cards.length} cards</Text>
+            </View>
+        </TouchableOpacity>
     )
 }
 
