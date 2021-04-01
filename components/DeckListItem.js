@@ -1,14 +1,23 @@
 import React from 'react'
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native'
+import {useNavigation} from '@react-navigation/core'
 
 import {colors} from '../utils/settings'
 import {formatDate} from '../utils/helpers'
 
-export default function DeckItem({deck}) {
+export default function DeckListItem({deck}) {
     const cards = Object.keys(deck.cards)
+    const navigation = useNavigation()
+
+    const onCardClick = deck => {
+        navigation.navigate('DeckDetail', deck)
+    }
 
     return (
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+            onPress={() => {
+                onCardClick(deck)
+            }}>
             <View style={styles.deckWrapper}>
                 <View style={styles.deckLeft}>
                     <Text style={styles.deckTitle}>{deck.name}</Text>
@@ -19,7 +28,18 @@ export default function DeckItem({deck}) {
                     )}
                 </View>
 
-                <Text style={styles.deckCardsInfo}>{cards.length} cards</Text>
+                <Text
+                    style={[
+                        styles.deckCardsInfo,
+                        {
+                            color:
+                                cards.length > 0
+                                    ? colors.primary
+                                    : colors.secondary,
+                        },
+                    ]}>
+                    {cards.length} cards
+                </Text>
             </View>
         </TouchableOpacity>
     )
@@ -30,13 +50,12 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         padding: 20,
-        margin: 10,
         marginTop: 5,
         marginBottom: 5,
         borderLeftWidth: 5,
         borderRadius: 10,
         borderColor: colors.primary,
-        backgroundColor: colors.primaryLight,
+        backgroundColor: colors.white,
         alignItems: 'center',
         justifyContent: 'space-between',
     },

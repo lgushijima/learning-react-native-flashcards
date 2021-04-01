@@ -1,33 +1,25 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {View, ScrollView} from 'react-native'
+import {useSelector} from 'react-redux'
 
 import {colors} from '../utils/settings'
+import {screenStyle} from '../utils/stylesheet'
 
-import DeckItem from './DeckItem'
-import {connect} from 'react-redux'
+import DeckListItem from './DeckListItem'
 
-class Decks extends Component {
-    render() {
-        const {decks} = this.props
+export default function Decks() {
+    console.log('OPAAA')
+    const decks = useSelector(state => state.decks)
 
-        return (
-            <View style={{flex: 1, backgroundColor: colors.white}}>
-                <ScrollView
-                    contentInsetAdjustmentBehavior="automatic"
-                    style={{flex: 1, paddingTop: 10}}>
-                    {Object.keys(decks).map(deck => (
-                        <DeckItem key={deck} deck={decks[deck]} />
-                    ))}
-                </ScrollView>
-            </View>
-        )
-    }
+    return (
+        <View style={screenStyle.screenWrapper}>
+            <ScrollView
+                contentInsetAdjustmentBehavior="automatic"
+                style={{flex: 1, paddingTop: 10}}>
+                {Object.keys(decks).map(deck => (
+                    <DeckListItem key={deck} deck={decks[deck]} />
+                ))}
+            </ScrollView>
+        </View>
+    )
 }
-
-function mapStateToProps({decks}) {
-    return {
-        decks,
-    }
-}
-
-export default connect(mapStateToProps)(Decks)

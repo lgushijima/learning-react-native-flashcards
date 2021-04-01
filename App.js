@@ -1,18 +1,15 @@
 import React, {Component} from 'react'
 import {StatusBar} from 'react-native'
 
-import {colors} from './utils/settings'
-import {setMenuItem} from './utils/helpers'
-import {handleGetDecks} from './actions/decks'
-
 import {NavigationContainer} from '@react-navigation/native'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import {createStackNavigator} from '@react-navigation/stack'
+
+import {colors} from './utils/settings'
+import {menus} from './utils/navigation'
+import {handleGetDecks} from './actions/decks'
 
 import Loading from './components/Loading'
-import Decks from './components/Decks'
-import Settings from './components/Settings'
-import NewDeck from './components/NewDeck'
-import MenuItem from './components/MenuItem'
 
 //-- redux
 import {createStore} from 'redux'
@@ -23,6 +20,7 @@ import middleware from './middleware'
 const store = createStore(reducer, middleware)
 
 const Tabs = createBottomTabNavigator()
+const Stack = createStackNavigator()
 
 class App extends Component {
     state = {
@@ -39,12 +37,6 @@ class App extends Component {
     }
 
     render() {
-        const menuOptions = {
-            decks: setMenuItem('Decks', 'bars', Decks),
-            newDeck: setMenuItem('New Deck', 'book', NewDeck),
-            settings: setMenuItem('Settings', 'cog', Settings),
-        }
-
         return (
             <Provider store={store}>
                 <NavigationContainer>
@@ -56,34 +48,75 @@ class App extends Component {
                     {this.state.isLoading ? (
                         <Loading />
                     ) : (
-                        <Tabs.Navigator
-                            headerMode="none"
-                            tabBarOptions={{
-                                activeTintColor: colors.primary,
-                                inactiveTintColor: colors.gray700,
+                        <Stack.Navigator
+                            options={{
+                                cardOverlayEnabled: true,
+                                cardOverlay: () => (
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            backgroundColor: '#F00',
+                                        }}
+                                    />
+                                ),
                             }}>
-                            {Object.keys(menuOptions).map(key => {
-                                const options = menuOptions[key]
-                                return (
-                                    <Tabs.Screen
-                                        key={key}
-                                        name={options.menuName}
-                                        options={options}>
-                                        {props => (
-                                            <MenuItem
-                                                {...props}
-                                                options={options}
-                                            />
-                                        )}
-                                    </Tabs.Screen>
-                                )
-                            })}
-                        </Tabs.Navigator>
+                            <Stack.Screen
+                                name="main"
+                                options={{
+                                    title: '',
+                                    header: () => null,
+                                }}
+                                component={TabsMenu}
+                            />
+
+                            {menus
+                                .filter(x => x.type === 'stack')
+                                .map(menu => (
+                                    <Stack.Screen
+                                        key={menu.name}
+                                        name={menu.name}
+                                        options={menu.options}
+                                        component={menu.component}
+                                    />
+                                ))}
+                        </Stack.Navigator>
                     )}
                 </NavigationContainer>
             </Provider>
         )
     }
+}
+
+const TabsMenu = () => {
+    return (
+        <Tabs.Navigator
+            tabBarOptions={{
+                activeTintColor: colors.primary,
+                inactiveTintColor: colors.gray700,
+            }}>
+            {menus
+                .filter(x => x.type === 'tab')
+                .map(menu => (
+                    <Tabs.Screen
+                        key={menu.name}
+                        name={menu.name}
+                        options={menu.options}>
+                        {() => {
+                            return (
+                                <Stack.Navigator>
+                                    <Stack.Screen
+                                        key={menu.name}
+                                        name={menu.name}
+                                        options={menu.options}
+                                        component={menu.component}
+                                    />
+                                </Stack.Navigator>
+                            )
+                        }}
+                    </Tabs.Screen>
+                ))}
+        </Tabs.Navigator>
+    )
 }
 
 export default App

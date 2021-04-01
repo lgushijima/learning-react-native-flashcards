@@ -41,6 +41,14 @@ function formatDeck(name) {
     }
 }
 
+function formatCard(question, answer) {
+    return {
+        id: generateUID(),
+        question,
+        answer,
+    }
+}
+
 export function _getDecks() {
     return new Promise((res, rej) => {
         setTimeout(() => res({...decks}), 1000)
@@ -67,19 +75,30 @@ export function _saveDeck(name) {
     })
 }
 
-export function _saveCard(deckId, card) {
+export function _saveCard(deckId, question, answer) {
     return new Promise((res, rej) => {
+        const formattedCard = formatCard(question, answer)
         setTimeout(() => {
             decks = {
                 ...decks,
-                [decks.id]: {
-                    ...decks[decks.id],
+                [deckId]: {
+                    ...decks[deckId],
                     cards: {
-                        ...decks[decks.id].cards,
-                        [card.id]: card,
+                        ...decks[deckId].cards,
+                        [formattedCard.id]: formattedCard,
                     },
                 },
             }
+
+            res()
+        }, 1000)
+    })
+}
+
+export function _removeDeck(deckId) {
+    return new Promise((res, rej) => {
+        setTimeout(() => {
+            delete decks[deckId]
 
             res()
         }, 1000)
