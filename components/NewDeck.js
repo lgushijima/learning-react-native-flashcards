@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react'
 import {Text, View, Keyboard} from 'react-native'
 
+import {useDispatch} from 'react-redux'
 import {useFocusEffect} from '@react-navigation/native'
 
 import {handleAddDecks} from '../actions/decks'
@@ -9,7 +10,6 @@ import AppTextInput from './AppTextInput'
 import AppButton from './AppButton'
 
 import {screenStyle} from '../utils/stylesheet'
-import {useDispatch} from 'react-redux'
 
 export default function NewDeck(props) {
     const dispatch = useDispatch()
@@ -27,10 +27,6 @@ export default function NewDeck(props) {
             }
         }, []),
     )
-
-    const onNameChanged = value => {
-        setName(() => value)
-    }
 
     const onAddNewDeck = () => {
         const {navigation} = props
@@ -62,7 +58,9 @@ export default function NewDeck(props) {
                     nameRef={nameRef}
                     placeholder={"Deck's name"}
                     value={name}
-                    onChange={onNameChanged}
+                    onChange={value => {
+                        setName(() => value)
+                    }}
                     editable={!isLoading}
                 />
             </View>

@@ -1,4 +1,4 @@
-import {getDecks, addDeck, removeDeck} from '../utils/api'
+import {getDecks, addDeck, removeDeck, addCard} from '../utils/api'
 
 export const GET_DECKS = 'GET_DECKS'
 export const ADD_DECK = 'ADD_DECK'

@@ -23,9 +23,12 @@ export default function decks(state = {}, action) {
             const {deckId, card} = action
             return {
                 ...state,
-                [action.deckId]: {
-                    ...state[action.deckId].cards,
-                    [card.id]: card,
+                [deckId]: {
+                    ...state[deckId],
+                    cards: {
+                        ...state[deckId].cards,
+                        [card.id]: card,
+                    },
                 },
             }
         }

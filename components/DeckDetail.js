@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 
 import AppButton from './AppButton'
 
@@ -15,18 +15,13 @@ export default function DeckDetail(props) {
 
     const {navigation, route} = props
 
-    const deck = route.params
+    const {deckId} = route.params
+    const deck = useSelector(state => state.decks[deckId])
     const cards = Object.keys(deck.cards)
-
-    useEffect(() => {
-        // navigation.setOptions({
-        //     title: 'Selected Deck',
-        // })
-    }, [navigation])
 
     const onAddNewCard = () => {
         const {navigation} = props
-        navigation.navigate('NewCard')
+        navigation.navigate('NewCard', {deckId: deck.id})
     }
 
     const onDeleteDeck = () => {

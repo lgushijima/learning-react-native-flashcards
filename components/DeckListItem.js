@@ -10,7 +10,7 @@ export default function DeckListItem({deck}) {
     const navigation = useNavigation()
 
     const onCardClick = deck => {
-        navigation.navigate('DeckDetail', deck)
+        navigation.navigate('DeckDetail', {deckId: deck.id})
     }
 
     return (

@@ -77,7 +77,7 @@ export function _saveDeck(name) {
 
 export function _saveCard(deckId, question, answer) {
     return new Promise((res, rej) => {
-        const formattedCard = formatCard(question, answer)
+        const formattedCard = formatCard(deckId, question, answer)
         setTimeout(() => {
             decks = {
                 ...decks,
@@ -90,7 +90,7 @@ export function _saveCard(deckId, question, answer) {
                 },
             }
 
-            res()
+            res(formattedCard)
         }, 1000)
     })
 }
