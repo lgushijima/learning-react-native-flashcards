@@ -1,7 +1,7 @@
 import React from 'react'
 import {StyleSheet, TextInput} from 'react-native'
 
-import {colors} from '../utils/settings'
+import {colors} from '../../utils/settings'
 
 export default function AppTextInput({
     placeholder,

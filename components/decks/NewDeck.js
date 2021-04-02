@@ -4,28 +4,24 @@ import {Text, View, Keyboard} from 'react-native'
 import {useDispatch} from 'react-redux'
 import {useFocusEffect} from '@react-navigation/native'
 
-import {handleAddCard} from '../actions/decks'
+import {handleAddDecks} from '../../actions/decks'
 
-import AppTextInput from './AppTextInput'
-import AppButton from './AppButton'
+import AppTextInput from '../common/AppTextInput'
+import AppButton from '../common/AppButton'
 
-import {screenStyle} from '../utils/stylesheet'
+import {screenStyle} from '../../utils/stylesheet'
 
-export default function NewCard(props) {
+export default function NewDeck(props) {
     const dispatch = useDispatch()
-    const questionRef = useRef(null)
+    const nameRef = useRef(null)
 
-    const {navigation, route} = props
-
-    const {deckId} = route.params
-
-    const [question, setQuestion] = useState('')
-    const [answer, setAnswer] = useState('')
+    const {navigation} = props
+    const [name, setName] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
     useFocusEffect(
         React.useCallback(() => {
-            questionRef.current?.focus()
+            nameRef.current?.focus()
 
             return () => {
                 Keyboard.dismiss()
@@ -33,18 +29,15 @@ export default function NewCard(props) {
         }, []),
     )
 
-    const onAddNewCard = () => {
-        const {navigation} = props
-
-        if (isLoading === false && deckId && question && answer) {
+    const onAddNewDeck = () => {
+        if (isLoading === false && name) {
             setIsLoading(true)
             Keyboard.dismiss()
 
-            dispatch(handleAddCard(deckId, question, answer))
+            dispatch(handleAddDecks(name))
                 .then(() => {
-                    navigation.goBack()
-                    setAnswer('')
-                    setQuestion('')
+                    navigation.navigate('Decks')
+                    setName('')
                     setIsLoading(false)
                 })
                 .catch(() => {
@@ -61,20 +54,11 @@ export default function NewCard(props) {
                 </Text>
 
                 <AppTextInput
-                    nameRef={questionRef}
-                    placeholder={'Type your questions'}
-                    value={question}
+                    nameRef={nameRef}
+                    placeholder={"Deck's name"}
+                    value={name}
                     onChange={value => {
-                        setQuestion(() => value)
-                    }}
-                    editable={!isLoading}
-                />
-
-                <AppTextInput
-                    placeholder={'Type the answer'}
-                    value={answer}
-                    onChange={value => {
-                        setAnswer(() => value)
+                        setName(() => value)
                     }}
                     editable={!isLoading}
                 />
@@ -82,7 +66,7 @@ export default function NewCard(props) {
             <View style={{margin: 30}}>
                 <AppButton
                     text={isLoading ? 'Submitting' : 'Submit'}
-                    onPress={onAddNewCard}
+                    onPress={onAddNewDeck}
                 />
             </View>
         </View>

@@ -1,16 +1,21 @@
-import React, {useEffect} from 'react'
+import React, {useContext} from 'react'
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
-import AppButton from './AppButton'
+import AppButton from '../common/AppButton'
+import ConfirmModal from '../modals/ConfirmModal'
 
-import {colors} from '../utils/settings'
-import {screenStyle} from '../utils/stylesheet'
-import {formatDate} from '../utils/helpers'
+import {colors} from '../../utils/settings'
+import {screenStyle} from '../../utils/stylesheet'
+import {formatDate} from '../../utils/helpers'
+import {BaseContext} from '../../utils/context'
 
-import {handleDeleteDeck} from '../actions/decks'
+import {handleDeleteDeck} from '../../actions/decks'
+import {openModal, closeModal} from '../../actions/base'
 
 export default function DeckDetail(props) {
+    const base = useContext(BaseContext)
+
     const dispatch = useDispatch()
 
     const {navigation, route} = props
@@ -20,19 +25,33 @@ export default function DeckDetail(props) {
     const cards = Object.keys(deck.cards)
 
     const onAddNewCard = () => {
-        const {navigation} = props
         navigation.navigate('NewCard', {deckId: deck.id})
     }
 
     const onDeleteDeck = () => {
-        const {navigation} = props
-        dispatch(handleDeleteDeck(deck.id)).then(() => {
-            navigation.navigate('Decks')
-        })
+        dispatch(
+            openModal(
+                <ConfirmModal
+                    text={'Do you really want to delete this Deck?'}
+                    onYesPress={() => {
+                        dispatch(handleDeleteDeck(deck.id)).then(() => {
+                            dispatch(closeModal()).then(() => {
+                                navigation.navigate('Decks')
+                            })
+                        })
+                    }}
+                    onNoPress={() => {
+                        dispatch(closeModal())
+                    }}
+                />,
+                {
+                    backgroundColor: colors.white,
+                },
+            ),
+        )
     }
 
     const onStartQuiz = () => {
-        const {navigation} = props
         navigation.navigate('Quiz')
     }
 

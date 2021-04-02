@@ -2,8 +2,8 @@ import React from 'react'
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native'
 import {useNavigation} from '@react-navigation/core'
 
-import {colors} from '../utils/settings'
-import {formatDate} from '../utils/helpers'
+import {colors} from '../../utils/settings'
+import {formatDate} from '../../utils/helpers'
 
 export default function DeckListItem({deck}) {
     const cards = Object.keys(deck.cards)

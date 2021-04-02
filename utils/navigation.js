@@ -2,12 +2,12 @@ import React from 'react'
 import Icons from 'react-native-vector-icons/FontAwesome5'
 import {colors} from './settings'
 
-import Decks from '../components/Decks'
-import Settings from '../components/Settings'
-import NewDeck from '../components/NewDeck'
-import DeckDetail from '../components/DeckDetail'
-import NewCard from '../components/NewCard'
-import Quiz from '../components/Quiz'
+import Decks from '../components/decks/Decks'
+import Settings from '../components/settings/Settings'
+import NewDeck from '../components/decks/NewDeck'
+import DeckDetail from '../components/decks/DeckDetail'
+import NewCard from '../components/cards/NewCard'
+import Quiz from '../components/quiz/Quiz'
 
 const menus = []
 menus.push(createMenuItem(Decks, 'Decks', 'Decks List', 'list'))
