@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import {StyleSheet, Animated, Dimensions, View} from 'react-native'
+import {screenStyle} from '../../utils/stylesheet'
 
 let {height} = Dimensions.get('window')
 
-const AppModal = ({open, style, component}) => {
+const AppModal = ({open, component, style = screenStyle.defaultModal}) => {
     const [state, setState] = useState({
         opacity: new Animated.Value(0),
         slideY: new Animated.Value(-height),
@@ -42,13 +43,13 @@ const AppModal = ({open, style, component}) => {
 
     const triggerCloseAnimation = () => {
         Animated.sequence([
-            Animated.timing(state.springY, {
-                toValue: -height,
-                duration: 100,
-                useNativeDriver: true,
-            }),
             Animated.timing(state.opacity, {
                 toValue: 0,
+                duration: 200,
+                useNativeDriver: true,
+            }),
+            Animated.timing(state.springY, {
+                toValue: -height,
                 duration: 100,
                 useNativeDriver: true,
             }),
@@ -72,7 +73,7 @@ const AppModal = ({open, style, component}) => {
         <Animated.View style={[styles.overlay, animatedStyle.overlay]}>
             <Animated.View
                 style={[styles.modalContent, style, animatedStyle.modal]}>
-                <View>{component}</View>
+                {component}
             </Animated.View>
         </Animated.View>
     )

@@ -43,7 +43,7 @@ let decks = {
         id: '1xj352vofupe1dqz9emx13r',
         name: 'English',
         cards: {},
-        lastQuiz: 1616878385642,
+        lastQuiz: null,
     },
 }
 
@@ -99,7 +99,7 @@ export function _saveDeck(name) {
 
 export function _saveCard(deckId, question, answer) {
     return new Promise((res, rej) => {
-        const formattedCard = formatCard(deckId, question, answer)
+        const formattedCard = formatCard(question, answer)
         setTimeout(() => {
             decks = {
                 ...decks,

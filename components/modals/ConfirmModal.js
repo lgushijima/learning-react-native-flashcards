@@ -5,41 +5,50 @@ import AppButton from '../common/AppButton'
 
 import {colors} from '../../utils/settings'
 
-export default function ConfirmModal({message, onYesPress, onNoPress}) {
+export default function ConfirmModal({
+    message,
+    yesText = 'Yes',
+    onYesPress,
+    noText = 'No',
+    onNoPress,
+}) {
     return (
-        <View>
-            <Text>{message}</Text>
+        <>
+            <View style={styles.modalContent}>
+                <Text style={{color: colors.text}}>{message}</Text>
+            </View>
             <View style={styles.buttonsWrapper}>
                 <AppButton
-                    text={'Yes'}
+                    text={yesText}
                     onPress={onYesPress}
                     style={[
                         styles.button,
-                        {backgroundColor: colors.btnPrimary},
+                        {marginRight: 5, backgroundColor: colors.btnPrimary},
                     ]}
                 />
                 <AppButton
-                    text={'No'}
+                    text={noText}
                     onPress={onNoPress}
                     style={[
                         styles.button,
-                        {backgroundColor: colors.btnSecondary},
+                        {marginLeft: 5, backgroundColor: colors.btnSecondary},
                     ]}
                 />
             </View>
-        </View>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
-    buttonsWrapper: {
+    modalContent: {
         flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    buttonsWrapper: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
-        justifyContent: 'flex-end',
     },
     button: {
-        marginLeft: 10,
         flex: 1,
     },
 })

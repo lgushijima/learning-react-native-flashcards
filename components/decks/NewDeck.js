@@ -1,4 +1,4 @@
-import React, {useContext, useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import {Text, View, Keyboard} from 'react-native'
 
 import {useDispatch} from 'react-redux'
@@ -8,14 +8,13 @@ import {handleAddDecks} from '../../actions/decks'
 
 import AppTextInput from '../common/AppTextInput'
 import AppButton from '../common/AppButton'
-import LoadingModal from '../modals/LoadingModal'
-import BaseContext from '../common/BaseContext'
+import {useModal} from '../modals/ModalProvider'
 
 import {screenStyle} from '../../utils/stylesheet'
 
 export default function NewDeck(props) {
     const dispatch = useDispatch()
-    const {modal} = useContext(BaseContext)
+    const {closeModal, showLoading} = useModal()
     const nameRef = useRef(null)
 
     const {navigation} = props
@@ -32,20 +31,17 @@ export default function NewDeck(props) {
     )
 
     const onAddNewDeck = () => {
-        modal.open(
-            <LoadingModal message={'Saving new deck...'} />,
-            screenStyle.defaultModal,
-        )
+        showLoading('Saving new deck...')
         Keyboard.dismiss()
 
         dispatch(handleAddDecks(name))
             .then(() => {
                 navigation.navigate('Decks')
-                modal.close()
+                closeModal()
                 setName('')
             })
             .catch(() => {
-                modal.close()
+                closeModal()
             })
     }
 

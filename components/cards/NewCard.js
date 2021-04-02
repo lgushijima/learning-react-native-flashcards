@@ -9,14 +9,14 @@ import {handleAddCard} from '../../actions/decks'
 import AppTextInput from '../common/AppTextInput'
 import AppButton from '../common/AppButton'
 import LoadingModal from '../modals/LoadingModal'
-import BaseContext from '../common/BaseContext'
+import {useModal} from '../modals/ModalProvider'
 
 import {screenStyle} from '../../utils/stylesheet'
 
 export default function NewCard(props) {
     const dispatch = useDispatch()
     const questionRef = useRef(null)
-    const {modal} = useContext(BaseContext)
+    const {closeModal, showLoading} = useModal()
 
     const {navigation, route} = props
 
@@ -39,21 +39,18 @@ export default function NewCard(props) {
         const {navigation} = props
 
         if (deckId && question && answer) {
-            modal.open(
-                <LoadingModal message={'Saving new card...'} />,
-                screenStyle.defaultModal,
-            )
+            showLoading('Saving new card...')
             Keyboard.dismiss()
 
             dispatch(handleAddCard(deckId, question, answer))
                 .then(() => {
                     navigation.goBack()
-                    modal.close()
+                    closeModal()
                     setAnswer('')
                     setQuestion('')
                 })
                 .catch(() => {
-                    modal.close()
+                    closeModal()
                 })
         }
     }
