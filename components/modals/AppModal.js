@@ -1,20 +1,30 @@
 import React, {useState, useEffect} from 'react'
-import {StyleSheet, Animated, Dimensions} from 'react-native'
+import {StyleSheet, Animated, Dimensions, View} from 'react-native'
 
 let {height} = Dimensions.get('window')
 
-const AppModal = ({show, style, component}) => {
+const AppModal = ({open, style, component}) => {
     const [state, setState] = useState({
         opacity: new Animated.Value(0),
         slideY: new Animated.Value(-height),
         springY: new Animated.Value(-height),
     })
 
+    const animatedStyle = {
+        overlay: {
+            opacity: state.opacity,
+            transform: [{translateY: state.slideY}],
+        },
+        modal: {
+            transform: [{translateY: state.springY}],
+        },
+    }
+
     const triggerOpenAnimation = () => {
         Animated.sequence([
             Animated.timing(state.slideY, {
                 toValue: 0,
-                duration: 100,
+                duration: 50,
                 useNativeDriver: true,
             }),
             Animated.timing(state.opacity, {
@@ -44,34 +54,25 @@ const AppModal = ({show, style, component}) => {
             }),
             Animated.timing(state.slideY, {
                 toValue: -height,
-                duration: 100,
+                duration: 50,
                 useNativeDriver: true,
             }),
         ]).start(() => {
             component = null
+            style = null
         })
     }
 
-    const animatedStyle = {
-        overlay: {
-            opacity: state.opacity,
-            transform: [{translateY: state.slideY}],
-        },
-        modal: {
-            transform: [{translateY: state.springY}],
-        },
-    }
-
     useEffect(() => {
-        if (show) triggerOpenAnimation()
+        if (open) triggerOpenAnimation()
         else triggerCloseAnimation()
-    }, [show])
+    }, [open])
 
     return (
         <Animated.View style={[styles.overlay, animatedStyle.overlay]}>
             <Animated.View
                 style={[styles.modalContent, style, animatedStyle.modal]}>
-                {component}
+                <View>{component}</View>
             </Animated.View>
         </Animated.View>
     )
@@ -87,16 +88,17 @@ const styles = StyleSheet.create({
         bottom: 0,
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 20,
     },
     modalContent: {
         position: 'absolute',
-        minHeight: 200,
-        width: '90%',
+        minHeight: 180,
         backgroundColor: 'transparent',
         borderRadius: 20,
         padding: 20,
         alignItems: 'center',
         justifyContent: 'center',
+        overflow: 'hidden',
     },
 })
 

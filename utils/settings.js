@@ -1,10 +1,4 @@
 let colors = {
-    primary: '#4682b4',
-    primaryLight: '#f0f8ff',
-
-    secondary: '#ff7f50',
-    secondaryLight: '#fdf5e6',
-
     gray100: '#E5E5E5',
     gray200: '#CCCCCC',
     gray300: '#B2B2B2',
@@ -15,11 +9,21 @@ let colors = {
     gray800: '#333333',
     gray900: '#191919',
 
+    primary: '#4682b4',
+    primaryLight: '#f0f8ff',
+
+    secondary: '#ff7f50',
+    secondaryLight: '#fdf5e6',
+
     black: '#000000',
     white: '#FFFFFF',
 }
 
-colors.bgDark = colors.gray900
-colors.bgLight = colors.white
+colors.btnPrimary = colors.primary
+colors.btnSecondary = colors.gray700
+
+colors.text = colors.gray700
+colors.textLight = colors.gray400
+colors.link = colors.primary
 
 export {colors}

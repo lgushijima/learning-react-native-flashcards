@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import React, {useContext, useRef, useState} from 'react'
 import {Text, View, Keyboard} from 'react-native'
 
 import {useDispatch} from 'react-redux'
@@ -8,16 +8,18 @@ import {handleAddDecks} from '../../actions/decks'
 
 import AppTextInput from '../common/AppTextInput'
 import AppButton from '../common/AppButton'
+import LoadingModal from '../modals/LoadingModal'
+import BaseContext from '../common/BaseContext'
 
 import {screenStyle} from '../../utils/stylesheet'
 
 export default function NewDeck(props) {
     const dispatch = useDispatch()
+    const {modal} = useContext(BaseContext)
     const nameRef = useRef(null)
 
     const {navigation} = props
     const [name, setName] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
 
     useFocusEffect(
         React.useCallback(() => {
@@ -30,20 +32,21 @@ export default function NewDeck(props) {
     )
 
     const onAddNewDeck = () => {
-        if (isLoading === false && name) {
-            setIsLoading(true)
-            Keyboard.dismiss()
+        modal.open(
+            <LoadingModal message={'Saving new deck...'} />,
+            screenStyle.defaultModal,
+        )
+        Keyboard.dismiss()
 
-            dispatch(handleAddDecks(name))
-                .then(() => {
-                    navigation.navigate('Decks')
-                    setName('')
-                    setIsLoading(false)
-                })
-                .catch(() => {
-                    setIsLoading(false)
-                })
-        }
+        dispatch(handleAddDecks(name))
+            .then(() => {
+                navigation.navigate('Decks')
+                modal.close()
+                setName('')
+            })
+            .catch(() => {
+                modal.close()
+            })
     }
 
     return (
@@ -60,14 +63,10 @@ export default function NewDeck(props) {
                     onChange={value => {
                         setName(() => value)
                     }}
-                    editable={!isLoading}
                 />
             </View>
             <View style={{margin: 30}}>
-                <AppButton
-                    text={isLoading ? 'Submitting' : 'Submit'}
-                    onPress={onAddNewDeck}
-                />
+                <AppButton text={'Submit'} onPress={onAddNewDeck} />
             </View>
         </View>
     )

@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react'
+import React, {useContext, useRef, useState} from 'react'
 import {Text, View, Keyboard} from 'react-native'
 
 import {useDispatch} from 'react-redux'
@@ -8,12 +8,15 @@ import {handleAddCard} from '../../actions/decks'
 
 import AppTextInput from '../common/AppTextInput'
 import AppButton from '../common/AppButton'
+import LoadingModal from '../modals/LoadingModal'
+import BaseContext from '../common/BaseContext'
 
 import {screenStyle} from '../../utils/stylesheet'
 
 export default function NewCard(props) {
     const dispatch = useDispatch()
     const questionRef = useRef(null)
+    const {modal} = useContext(BaseContext)
 
     const {navigation, route} = props
 
@@ -21,7 +24,6 @@ export default function NewCard(props) {
 
     const [question, setQuestion] = useState('')
     const [answer, setAnswer] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
 
     useFocusEffect(
         React.useCallback(() => {
@@ -36,19 +38,22 @@ export default function NewCard(props) {
     const onAddNewCard = () => {
         const {navigation} = props
 
-        if (isLoading === false && deckId && question && answer) {
-            setIsLoading(true)
+        if (deckId && question && answer) {
+            modal.open(
+                <LoadingModal message={'Saving new card...'} />,
+                screenStyle.defaultModal,
+            )
             Keyboard.dismiss()
 
             dispatch(handleAddCard(deckId, question, answer))
                 .then(() => {
                     navigation.goBack()
+                    modal.close()
                     setAnswer('')
                     setQuestion('')
-                    setIsLoading(false)
                 })
                 .catch(() => {
-                    setIsLoading(false)
+                    modal.close()
                 })
         }
     }
@@ -67,7 +72,6 @@ export default function NewCard(props) {
                     onChange={value => {
                         setQuestion(() => value)
                     }}
-                    editable={!isLoading}
                 />
 
                 <AppTextInput
@@ -76,14 +80,10 @@ export default function NewCard(props) {
                     onChange={value => {
                         setAnswer(() => value)
                     }}
-                    editable={!isLoading}
                 />
             </View>
             <View style={{margin: 30}}>
-                <AppButton
-                    text={isLoading ? 'Submitting' : 'Submit'}
-                    onPress={onAddNewCard}
-                />
+                <AppButton text={'Submit'} onPress={onAddNewCard} />
             </View>
         </View>
     )

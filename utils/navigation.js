@@ -7,7 +7,7 @@ import Settings from '../components/settings/Settings'
 import NewDeck from '../components/decks/NewDeck'
 import DeckDetail from '../components/decks/DeckDetail'
 import NewCard from '../components/cards/NewCard'
-import Quiz from '../components/quiz/Quiz'
+import CardQuiz from '../components/cards/CardQuiz'
 
 const menus = []
 menus.push(createMenuItem(Decks, 'Decks', 'Decks List', 'list'))
@@ -16,7 +16,7 @@ menus.push(createMenuItem(Settings, 'Settings', 'Settings', 'cog'))
 
 menus.push(createMenuItem(DeckDetail, 'DeckDetail', 'Deck'))
 menus.push(createMenuItem(NewCard, 'NewCard', 'Add New Card'))
-menus.push(createMenuItem(Quiz, 'Quiz', 'Quiz'))
+menus.push(createMenuItem(CardQuiz, 'Quiz', 'Quiz'))
 
 export {menus}
 

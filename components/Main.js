@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {StatusBar, Text} from 'react-native'
+import {StatusBar} from 'react-native'
 
 import {NavigationContainer} from '@react-navigation/native'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
@@ -8,6 +8,8 @@ import {createStackNavigator} from '@react-navigation/stack'
 import {useDispatch, useSelector} from 'react-redux'
 
 import AppModal from './modals/AppModal'
+import LoadingModal from './modals/LoadingModal'
+import BaseContext from './common/BaseContext'
 
 import {colors} from '../utils/settings'
 import {menus} from '../utils/navigation'
@@ -23,17 +25,28 @@ export default function Main() {
 
     const base = useSelector(state => state.base)
 
+    const baseContext = {
+        modal: {
+            open(component, style) {
+                dispatch(openModal(component, style))
+            },
+            close() {
+                dispatch(closeModal())
+            },
+        },
+    }
+
     useEffect(() => {
-        dispatch(openModal(<Text>Loading...</Text>))
+        baseContext.modal.open(<LoadingModal />)
 
         dispatch(handleGetDecks()).then(() => {
             setIsLoading(false)
-            dispatch(closeModal())
+            baseContext.modal.close()
         })
     }, [])
 
     return (
-        <>
+        <BaseContext.Provider value={baseContext}>
             <NavigationContainer>
                 <StatusBar
                     barStyle="dark-content"
@@ -76,12 +89,8 @@ export default function Main() {
                 )}
             </NavigationContainer>
 
-            <AppModal
-                show={base.open}
-                component={base.component}
-                style={base.style}
-            />
-        </>
+            <AppModal {...base} />
+        </BaseContext.Provider>
     )
 }
 

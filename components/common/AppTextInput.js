@@ -20,7 +20,7 @@ export default function AppTextInput({
             }}
             placeholder={placeholder}
             {...props}
-            placeholderTextColor={colors.gray200}
+            placeholderTextColor={colors.textLight}
         />
     )
 }
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: colors.gray200,
         backgroundColor: colors.white,
-        color: colors.gray700,
+        color: colors.text,
         alignItems: 'center',
         height: 50,
         marginBottom: 5,

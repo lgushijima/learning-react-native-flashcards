@@ -6,6 +6,8 @@ import {colors} from '../../utils/settings'
 import {formatDate} from '../../utils/helpers'
 
 export default function DeckListItem({deck}) {
+    if (!deck) return null
+
     const cards = Object.keys(deck.cards)
     const navigation = useNavigation()
 
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
     deckInfo: {
         color: colors.primary,
         fontSize: 13,
-        color: colors.gray400,
+        color: colors.textLight,
     },
     deckCardsInfo: {color: colors.primary},
 })

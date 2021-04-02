@@ -3,25 +3,25 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
 
 import AppButton from '../common/AppButton'
+import LoadingModal from '../modals/LoadingModal'
 import ConfirmModal from '../modals/ConfirmModal'
+import BaseContext from '../common/BaseContext'
 
 import {colors} from '../../utils/settings'
 import {screenStyle} from '../../utils/stylesheet'
 import {formatDate} from '../../utils/helpers'
-import {BaseContext} from '../../utils/context'
 
 import {handleDeleteDeck} from '../../actions/decks'
-import {openModal, closeModal} from '../../actions/base'
 
 export default function DeckDetail(props) {
-    const base = useContext(BaseContext)
-
     const dispatch = useDispatch()
+    const {modal} = useContext(BaseContext)
 
     const {navigation, route} = props
-
     const {deckId} = route.params
+
     const deck = useSelector(state => state.decks[deckId])
+    if (!deck) return null
     const cards = Object.keys(deck.cards)
 
     const onAddNewCard = () => {
@@ -29,30 +29,30 @@ export default function DeckDetail(props) {
     }
 
     const onDeleteDeck = () => {
-        dispatch(
-            openModal(
-                <ConfirmModal
-                    text={'Do you really want to delete this Deck?'}
-                    onYesPress={() => {
-                        dispatch(handleDeleteDeck(deck.id)).then(() => {
-                            dispatch(closeModal()).then(() => {
-                                navigation.navigate('Decks')
-                            })
-                        })
-                    }}
-                    onNoPress={() => {
-                        dispatch(closeModal())
-                    }}
-                />,
-                {
-                    backgroundColor: colors.white,
-                },
-            ),
+        modal.open(
+            <ConfirmModal
+                message={'Do you really want to delete this Deck?'}
+                onYesPress={() => {
+                    modal.open(
+                        <LoadingModal message={'Deleting deck...'} />,
+                        screenStyle.defaultModal,
+                    )
+
+                    dispatch(handleDeleteDeck(deck.id)).then(() => {
+                        navigation.navigate('Decks')
+                        modal.close()
+                    })
+                }}
+                onNoPress={() => {
+                    modal.close()
+                }}
+            />,
+            screenStyle.defaultModal,
         )
     }
 
     const onStartQuiz = () => {
-        navigation.navigate('Quiz')
+        navigation.navigate('Quiz', {deckId: deck.id})
     }
 
     return (
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     deckInfo: {
         color: colors.primary,
         fontSize: 13,
-        color: colors.gray400,
+        color: colors.textLight,
         textAlign: 'center',
     },
     cardsInfo: {
