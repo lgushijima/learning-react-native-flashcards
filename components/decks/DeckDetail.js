@@ -1,6 +1,8 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native'
 import {useDispatch, useSelector} from 'react-redux'
+
+import Icons from 'react-native-vector-icons/FontAwesome5'
 
 import AppButton from '../common/AppButton'
 import LoadingModal from '../modals/LoadingModal'
@@ -23,6 +25,12 @@ export default function DeckDetail(props) {
     const deck = useSelector(state => state.decks[deckId])
     if (!deck) return null
     const cards = Object.keys(deck.cards)
+
+    useEffect(() => {
+        navigation.setOptions({
+            title: deck.name + ' Deck',
+        })
+    }, [])
 
     const onAddNewCard = () => {
         navigation.navigate('NewCard', {deckId: deck.id})
@@ -95,6 +103,7 @@ export default function DeckDetail(props) {
                     <TouchableOpacity
                         onPress={onDeleteDeck}
                         style={styles.deleteBtn}>
+                        <Icons name={'trash'} size={15} color={'#db5858'} />
                         <Text style={styles.deleteText}>Delete this Deck</Text>
                     </TouchableOpacity>
                 </View>

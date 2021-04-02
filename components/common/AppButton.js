@@ -3,9 +3,15 @@ import {StyleSheet, Text, TouchableOpacity} from 'react-native'
 
 import {colors} from '../../utils/settings'
 
-export default function AppButton({text, onPress, style}) {
+export default function AppButton({text, onPress, style, value}) {
     return (
-        <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
+        <TouchableOpacity
+            style={[styles.button, style]}
+            onPress={() => {
+                if (typeof onPress === 'function') {
+                    onPress(value)
+                }
+            }}>
             <Text style={styles.buttonText}>{text}</Text>
         </TouchableOpacity>
     )

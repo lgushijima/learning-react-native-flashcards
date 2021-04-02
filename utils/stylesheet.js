@@ -24,4 +24,16 @@ export const screenStyle = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 15,
     },
+    colCentered: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+    },
+    rowCentered: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+    },
 })
