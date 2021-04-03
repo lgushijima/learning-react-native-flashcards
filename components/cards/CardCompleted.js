@@ -17,6 +17,35 @@ export default function CardCompleted(props) {
         onQuitPress,
     } = props
 
+    const percentage = parseFloat(correctPercentage)
+    let resultTitle = ''
+    let resultSubTitle = ''
+    let colorLevel = ''
+
+    if (percentage >= 90) {
+        resultTitle = 'Excelent!!'
+        resultSubTitle =
+            'You have achieved a great knowledge over those topics!!'
+        colorLevel = '#31c807'
+    } else if (percentage >= 75) {
+        resultTitle = 'Very nice!'
+        resultSubTitle =
+            'You went pretty well, keep practing to master those topics!'
+        colorLevel = '#90cc54'
+    } else if (percentage >= 50) {
+        resultTitle = 'That was good!'
+        resultSubTitle = 'You are getting there, continue your studies!'
+        colorLevel = '#e1d40b'
+    } else if (percentage >= 25) {
+        resultTitle = 'Not good!'
+        resultSubTitle = 'keep your commitment to improve your knowledge.'
+        colorLevel = '#eab470'
+    } else {
+        resultTitle = 'Ughh, That was bad!'
+        resultSubTitle = 'You need to study and practice more.'
+        colorLevel = '#d9633f'
+    }
+    const [isLoading, setIsLoading] = useState(true)
     const [state, setState] = useState({
         opacity: new Animated.Value(0),
         springY: new Animated.Value(0),
@@ -44,7 +73,9 @@ export default function CardCompleted(props) {
                 bounciness: 5,
                 useNativeDriver: true,
             }),
-        ]).start()
+        ]).start(() => {
+            setIsLoading(false)
+        })
     }
 
     useEffect(() => {
@@ -55,7 +86,10 @@ export default function CardCompleted(props) {
         <Animated.View
             style={[{flex: 1, flexDirection: 'column'}, animatedStyle.screen]}>
             <View style={screenStyle.colCentered}>
-                <Text style={styles.title}>Well done!!!</Text>
+                <Text style={[styles.title, {color: colorLevel}]}>
+                    {resultTitle}
+                </Text>
+                <Text style={screenStyle.subtitle}>{resultSubTitle}</Text>
 
                 <Text style={styles.info}>
                     You answered correctly {correctAnswerCount} out of{' '}
@@ -64,19 +98,28 @@ export default function CardCompleted(props) {
             </View>
 
             <View style={[screenStyle.colCentered, {flex: 1}]}>
-                <View style={styles.panelScore}>
-                    <Text style={styles.scorePercentage}>
+                <View style={[styles.panelScore, {borderColor: colorLevel}]}>
+                    <Text style={[styles.scorePercentage, {color: colorLevel}]}>
                         {correctPercentage}
                     </Text>
-                    <Text style={styles.scoreLabel}>%</Text>
+                    <Text style={[styles.scoreLabel, {color: colorLevel}]}>
+                        %
+                    </Text>
                 </View>
             </View>
 
             <View>
-                <AppButton text={'Restart Quiz'} onPress={onResetQuisPress} />
+                <AppButton
+                    text={'Restart Quiz'}
+                    onPress={() => {
+                        isLoading ? null : onResetQuisPress()
+                    }}
+                />
                 <AppButton
                     text={'Quit'}
-                    onPress={onQuitPress}
+                    onPress={() => {
+                        isLoading ? null : onQuitPress()
+                    }}
                     style={{
                         marginTop: 10,
                         backgroundColor: colors.btnSecondary,

@@ -12,6 +12,7 @@ import LoadingModal from '../modals/LoadingModal'
 import {useModal} from '../modals/ModalProvider'
 
 import {screenStyle} from '../../utils/stylesheet'
+import {colors} from '../../utils/settings'
 
 export default function NewCard(props) {
     const dispatch = useDispatch()
@@ -59,9 +60,14 @@ export default function NewCard(props) {
         <View style={screenStyle.screenWrapper}>
             <View style={screenStyle.screenContent}>
                 <Text style={screenStyle.title}>
-                    What is the title of your new deck?
+                    What is the question and the answer for your new card?
+                </Text>
+                <Text style={[screenStyle.subtitle, {fontStyle: 'italic'}]}>
+                    tips: Make sure to keep your question simple and with good
+                    keywords on it!
                 </Text>
 
+                <Text style={screenStyle.label}>Question</Text>
                 <AppTextInput
                     nameRef={questionRef}
                     placeholder={'Type your questions'}
@@ -71,6 +77,7 @@ export default function NewCard(props) {
                     }}
                 />
 
+                <Text style={screenStyle.label}>Answer</Text>
                 <AppTextInput
                     placeholder={'Type the answer'}
                     value={answer}

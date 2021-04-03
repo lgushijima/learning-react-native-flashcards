@@ -11,6 +11,7 @@ import AppButton from '../common/AppButton'
 import {useModal} from '../modals/ModalProvider'
 
 import {screenStyle} from '../../utils/stylesheet'
+import {colors} from '../../utils/settings'
 
 export default function NewDeck(props) {
     const dispatch = useDispatch()
@@ -52,9 +53,16 @@ export default function NewDeck(props) {
                     What is the title of your new deck?
                 </Text>
 
+                <Text style={[screenStyle.subtitle, {fontStyle: 'italic'}]}>
+                    tips: Use a simple name with a good meaning that will
+                    represent all the cards inside of it!
+                </Text>
+
+                <Text style={screenStyle.label}>Deck Name</Text>
+
                 <AppTextInput
                     nameRef={nameRef}
-                    placeholder={"Deck's name"}
+                    placeholder={'Type a name for this new deck'}
                     value={name}
                     onChange={value => {
                         setName(() => value)

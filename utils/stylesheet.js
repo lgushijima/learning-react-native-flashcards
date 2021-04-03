@@ -18,11 +18,28 @@ export const screenStyle = StyleSheet.create({
         flexDirection: 'column',
         flexGrow: 1,
     },
+    panelWrapper: {
+        backgroundColor: colors.white,
+        padding: 10,
+        borderRadius: 20,
+        marginBottom: 10,
+    },
     title: {
-        fontSize: 30,
+        fontSize: 22,
         color: colors.primary,
         textAlign: 'center',
         marginBottom: 15,
+    },
+    subtitle: {
+        color: colors.gray300,
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    label: {
+        color: colors.gray300,
+        fontSize: 14,
+        marginBottom: 5,
     },
     colCentered: {
         flexDirection: 'column',

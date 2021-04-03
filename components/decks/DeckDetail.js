@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     },
     deleteBtn: {
         padding: 10,
-        marginTop: 30,
+        marginTop: 60,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',

@@ -1,8 +1,8 @@
 import AppModal from './AppModal'
 import React, {useState, useContext} from 'react'
-import {screenStyle} from '../../utils/stylesheet'
 import LoadingModal from './LoadingModal'
 import ConfirmModal from './ConfirmModal'
+import BasicModal from './BasicModal'
 
 export const ModalContext = React.createContext({})
 
@@ -51,6 +51,17 @@ export const useModal = () => {
         openModal(<LoadingModal message={message} />, style)
     }
 
+    const showBasicModal = ({message, confirmText, onConfirmPress, style}) => {
+        openModal(
+            <BasicModal
+                message={message}
+                confirmText={confirmText}
+                onConfirmPress={onConfirmPress || closeModal}
+            />,
+            style,
+        )
+    }
+
     const showConfirm = ({
         message,
         yesText,
@@ -75,6 +86,7 @@ export const useModal = () => {
         openModal,
         closeModal,
         showLoading,
+        showBasicModal,
         showConfirm,
     }
 }

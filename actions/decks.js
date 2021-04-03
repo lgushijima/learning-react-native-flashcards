@@ -5,6 +5,7 @@ export const ADD_DECK = 'ADD_DECK'
 export const REMOVE_DECK = 'REMOVE_DECK'
 export const ADD_CARD = 'ADD_CARD'
 export const SAVE_QUIZ_LOG = 'SAVE_QUIZ_LOG'
+export const REFRESH = 'REFRESH'
 
 // GET DECKS
 function actionGetDecks(decks) {

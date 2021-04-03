@@ -100,8 +100,13 @@ export function _resetData() {
 
 export function _addPresetData() {
     return new Promise((res, rej) => {
-        resetData().then(() => {
-            saveDeck(presetDecks).then(() => {
+        getDataFromStorage().then(decks => {
+            const data = {
+                ...decks,
+                ...presetDecks,
+            }
+
+            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data)).then(() => {
                 res()
             })
         })
@@ -153,55 +158,120 @@ function removeData(deckId) {
 }
 
 function resetData() {
-    return AsyncStorage.setItem(STORAGE_KEY, null)
+    return AsyncStorage.removeItem(STORAGE_KEY)
 }
 
 let presetDecks = {
-    '2vthrdm985a262al8qx3do': {
-        id: '2vthrdm985a262al8qx3do',
+    ['1a']: {
+        id: '1a',
         name: 'World War II',
         cards: {
-            '1loxhs1bqm25b708cmbf3g': {
-                id: '1loxhs1bqm25b708cmbf3g',
+            '11a': {
+                id: '11a',
                 question:
                     'What two countries were already involved in a military conflict before the beginning of World War II?',
                 answer: 'Japan and China',
-                createdAt: 1616969385642,
+                createdAt: 1616969385101,
             },
-            '2am8ehyc8byjqgar0jgpub9': {
-                id: '2am8ehyc8byjqgar0jgpub9',
+            '12a': {
+                id: '12a',
                 question: 'What was the longest battle of World War II?',
                 answer: 'Battle of the Atlantic',
-                createdAt: 1616969385642,
+                createdAt: 1616969385102,
             },
-            '3m7de1znrmgmdj8hfybsgi': {
-                id: '3m7de1znrmgmdj8hfybsgi',
+            '13a': {
+                id: '13a',
                 question: 'What was the first Nazi concentration camp?',
                 answer: 'Dachau',
-                createdAt: 1616969385642,
+                createdAt: 1616969385103,
             },
-            '4zn1rrkzxit4s81zt4c8hq': {
-                id: '4zn1rrkzxit4s81zt4c8hq',
+            '14a': {
+                id: '14a',
                 question:
                     'On which beach did the Americans run into a firestorm of resistance during the D-Day landings?',
                 answer: 'Omaha',
-                createdAt: 1616969385642,
+                createdAt: 1616969385104,
             },
-            '5chvj3oke09o1mjq9pq1gq5': {
-                id: '5chvj3oke09o1mjq9pq1gq5',
+            '15a': {
+                id: '15a',
                 question: 'What country lost the most lives in World War II?',
                 answer: 'Soviet Union',
-                createdAt: 1616969385642,
+                createdAt: 1616969385105,
             },
-            '6m5se0d464wrq04jib7ulu': {
-                id: '6m5se0d464wrq04jib7ulu',
+            '16a': {
+                id: '16a',
                 question:
                     'What was the name of the B-29 bomber that dropped the first atomic bomb on Hiroshima?',
                 answer: 'Enola Gay',
-                createdAt: 1616969385642,
+                createdAt: 1616969385106,
             },
         },
-        lastQuiz: 1616979385642,
-        createdAt: 1616969385642,
+        lastQuiz: null,
+        createdAt: 1616969385100,
+    },
+    '2a': {
+        id: '2a',
+        name: 'Do you know Brazil?',
+        cards: {
+            '21a': {
+                id: '21a',
+                question: 'In what part of the world is Brazil located?',
+                answer: 'South America',
+                createdAt: 1616969385201,
+            },
+            '22a': {
+                id: '22a',
+                question:
+                    'Brazil was discovered by sailors from which country in 1500?',
+                answer: 'Portugal',
+                createdAt: 1616969385202,
+            },
+            '23a': {
+                id: '33a',
+                question: `What is Brazil's official language?`,
+                answer: 'Portuguese',
+                createdAt: 1616969385203,
+            },
+            '24a': {
+                id: '24a',
+                question: 'What city is the capital of Brazil?',
+                answer: 'Brasília',
+                createdAt: 1616969385204,
+            },
+            '25a': {
+                id: '25a',
+                question: 'What is the name of the Brazilian Currency?',
+                answer: 'Real',
+                createdAt: 1616969385205,
+            },
+            '26a': {
+                id: '26a',
+                question:
+                    'Football (soccer) is a passion of the Brazilian people. How many times has the country won the FIFA World Cup',
+                answer: 'Five',
+                createdAt: 1616969385206,
+            },
+            '27a': {
+                id: '27a',
+                question:
+                    'In what month do the world-famous "Carnaval" festivities happen in Brazil?',
+                answer: 'February',
+                createdAt: 1616969385207,
+            },
+            '28a': {
+                id: '28a',
+                question: 'What is feijoada?',
+                answer: 'A stew made of black beans and meat',
+                createdAt: 1616969385208,
+            },
+            '29a': {
+                id: '29a',
+                question: 'What is the word "carioca" used to describe in Rio?',
+                answer: 'Local people',
+                createdAt: 1616969385209,
+            },
+        },
+        lastQuiz: null,
+        createdAt: 1616969385200,
     },
 }

@@ -5,6 +5,8 @@ import {
     _saveCard,
     _removeDeck,
     _saveQuizLog,
+    _resetData,
+    _addPresetData,
 } from './_DATA.js'
 
 export function getCards(deckId) {
@@ -29,4 +31,12 @@ export function addCard(deckId, question, answer) {
 
 export function saveQuizLog(deckId) {
     return _saveQuizLog(deckId)
+}
+
+export function resetData() {
+    return _resetData()
+}
+
+export function addPresetData() {
+    return _addPresetData()
 }
