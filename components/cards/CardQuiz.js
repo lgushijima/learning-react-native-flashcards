@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import {Text, View, StyleSheet} from 'react-native'
+import {Text, View} from 'react-native'
 
 import {useDispatch, useSelector} from 'react-redux'
-import Icons from 'react-native-vector-icons/FontAwesome5'
 
 import AppButton from '../common/AppButton'
+import NoRecords from '../common/NoRecords'
 import CardQuestion from './CardQuestion'
 import CardCompleted from './CardCompleted'
 
@@ -61,16 +61,9 @@ export default function CardQuiz(props) {
         <View style={screenStyle.screenWrapper}>
             <View style={screenStyle.screenContent}>
                 {totalCards === 0 ? (
-                    <View style={styles.noCardsPanel}>
-                        <Icons
-                            name={'exclamation-triangle'}
-                            size={60}
-                            color={colors.gray200}
-                        />
-                        <Text style={styles.noCardsLabel}>
-                            There are no cards created for this deck!
-                        </Text>
-                    </View>
+                    <NoRecords
+                        message={'There are no cards created for this deck!'}
+                    />
                 ) : (
                     <View style={{flex: 1}}>
                         {currentStep < totalCards ? (
@@ -138,17 +131,3 @@ export default function CardQuiz(props) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    noCardsPanel: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    noCardsLabel: {
-        fontSize: 16,
-        color: colors.gray300,
-        padding: 10,
-        textAlign: 'center',
-    },
-})

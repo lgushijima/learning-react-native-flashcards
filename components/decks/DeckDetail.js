@@ -84,15 +84,20 @@ export default function DeckDetail(props) {
 
                 <View style={styles.buttonsWrapper}>
                     <AppButton
-                        text={'Add New Card'}
-                        onPress={onAddNewCard}
-                        style={{marginTop: 10}}
-                    />
-
-                    <AppButton
                         text={'Start Quiz'}
                         onPress={onStartQuiz}
-                        style={{marginTop: 10, backgroundColor: colors.gray700}}
+                        style={{
+                            marginTop: 10,
+                            backgroundColor: colors.btnPrimary,
+                        }}
+                    />
+                    <AppButton
+                        text={'Add New Card'}
+                        onPress={onAddNewCard}
+                        style={{
+                            marginTop: 10,
+                            backgroundColor: colors.btnSecondary,
+                        }}
                     />
 
                     <TouchableOpacity

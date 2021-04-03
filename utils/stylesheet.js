@@ -53,4 +53,15 @@ export const screenStyle = StyleSheet.create({
         justifyContent: 'center',
         width: '100%',
     },
+    noRecordsPanel: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    noRecordsLabel: {
+        fontSize: 16,
+        color: colors.gray300,
+        padding: 10,
+        textAlign: 'center',
+    },
 })
