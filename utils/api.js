@@ -4,6 +4,7 @@ import {
     _saveDeck,
     _saveCard,
     _removeDeck,
+    _saveQuizLog,
 } from './_DATA.js'
 
 export function getCards(deckId) {
@@ -18,10 +19,14 @@ export function addDeck(name) {
     return _saveDeck(name)
 }
 
-export function removeDeck(id) {
-    return _removeDeck(id)
+export function removeDeck(deckId) {
+    return _removeDeck(deckId)
 }
 
 export function addCard(deckId, question, answer) {
     return _saveCard(deckId, question, answer)
+}
+
+export function saveQuizLog(deckId) {
+    return _saveQuizLog(deckId)
 }

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {Text, View, StyleSheet} from 'react-native'
 
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import Icons from 'react-native-vector-icons/FontAwesome5'
 
 import AppButton from '../common/AppButton'
@@ -11,8 +11,10 @@ import CardCompleted from './CardCompleted'
 import {colors} from '../../utils/settings'
 import {shuffleArray} from '../../utils/helpers'
 import {screenStyle} from '../../utils/stylesheet'
+import {handleSaveQuizLog} from '../../actions/decks'
 
 export default function CardQuiz(props) {
+    const dispatch = useDispatch()
     const {navigation, route} = props
     const {deckId} = route.params
 
@@ -31,16 +33,22 @@ export default function CardQuiz(props) {
     const [suffledCards, setSuffledCards] = useState(shuffleArray(cardIds))
 
     const card = deck.cards[suffledCards[currentStep]]
+    const totalCards = cardIds.length
 
     const correctPercentage = parseFloat(
-        parseInt(((correctAnswerCount * 100) / cardIds.length) * 100, 10) / 100,
+        parseInt(((correctAnswerCount * 100) / totalCards) * 100, 10) / 100,
     ).toFixed(1)
 
     const onAnswerPress = isCorrectAnswer => {
+        const nextStep = currentStep + 1
         setShowAnswer(false)
-        setCurrentStep(currentStep + 1)
+        setCurrentStep(nextStep)
 
         if (isCorrectAnswer) setCorrectAnswerCount(correctAnswerCount + 1)
+
+        if (nextStep >= totalCards) {
+            dispatch(handleSaveQuizLog(deckId))
+        }
     }
 
     const onResetQuisPress = () => {
@@ -52,7 +60,7 @@ export default function CardQuiz(props) {
     return (
         <View style={screenStyle.screenWrapper}>
             <View style={screenStyle.screenContent}>
-                {cardIds.length === 0 ? (
+                {totalCards === 0 ? (
                     <View style={styles.noCardsPanel}>
                         <Icons
                             name={'exclamation-triangle'}
@@ -65,14 +73,14 @@ export default function CardQuiz(props) {
                     </View>
                 ) : (
                     <View style={{flex: 1}}>
-                        {currentStep < cardIds.length ? (
+                        {currentStep < totalCards ? (
                             <>
                                 <Text
                                     style={{
                                         textAlign: 'center',
                                         color: colors.primary,
                                     }}>
-                                    Card {currentStep + 1} of {cardIds.length}
+                                    Card {currentStep + 1} of {totalCards}
                                 </Text>
 
                                 <CardQuestion
@@ -119,7 +127,7 @@ export default function CardQuiz(props) {
                             <CardCompleted
                                 correctPercentage={correctPercentage}
                                 correctAnswerCount={correctAnswerCount}
-                                totalCards={cardIds.length}
+                                totalCards={totalCards}
                                 onResetQuisPress={onResetQuisPress}
                                 onQuitPress={navigation.goBack}
                             />

@@ -1,9 +1,10 @@
-import {getDecks, addDeck, removeDeck, addCard} from '../utils/api'
+import {getDecks, addDeck, removeDeck, addCard, saveQuizLog} from '../utils/api'
 
 export const GET_DECKS = 'GET_DECKS'
 export const ADD_DECK = 'ADD_DECK'
 export const REMOVE_DECK = 'REMOVE_DECK'
 export const ADD_CARD = 'ADD_CARD'
+export const SAVE_QUIZ_LOG = 'SAVE_QUIZ_LOG'
 
 // GET DECKS
 function actionGetDecks(decks) {
@@ -63,6 +64,23 @@ export function handleAddCard(deckId, question, answer) {
     return dispatch => {
         return addCard(deckId, question, answer).then(card => {
             dispatch(actionAddCard(deckId, card))
+        })
+    }
+}
+
+// SAVE QUIZ LOG
+function actionSaveQuizLog(deckId, lastQuiz) {
+    return {
+        type: SAVE_QUIZ_LOG,
+        deckId,
+        lastQuiz,
+    }
+}
+
+export function handleSaveQuizLog(deckId) {
+    return dispatch => {
+        return saveQuizLog(deckId).then(lastQuiz => {
+            dispatch(actionSaveQuizLog(deckId, lastQuiz))
         })
     }
 }

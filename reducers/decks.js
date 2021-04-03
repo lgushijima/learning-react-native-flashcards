@@ -1,4 +1,10 @@
-import {GET_DECKS, ADD_DECK, ADD_CARD, REMOVE_DECK} from '../actions/decks'
+import {
+    GET_DECKS,
+    ADD_DECK,
+    ADD_CARD,
+    REMOVE_DECK,
+    SAVE_QUIZ_LOG,
+} from '../actions/decks'
 
 export default function decks(state = {}, action) {
     switch (action.type) {
@@ -29,6 +35,16 @@ export default function decks(state = {}, action) {
                         ...state[deckId].cards,
                         [card.id]: card,
                     },
+                },
+            }
+        }
+        case SAVE_QUIZ_LOG: {
+            const {deckId, lastQuiz} = action
+            return {
+                ...state,
+                [deckId]: {
+                    ...state[deckId],
+                    lastQuiz: lastQuiz,
                 },
             }
         }
