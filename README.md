@@ -17,14 +17,14 @@ https://reactnative.dev/docs/environment-setup
 -   JDK (Java SE Development Kit)
 -   Android Studio
 
-# Run Project
+## Running this Project
 
 In the project directory, execute the following commands in a terminal windows:
 
-### `npm install`
+#### `npm install`
 
 This will install all dependecy packages
 
-### `react-native run-android`
+#### `react-native run-android`
 
 Starts the app using the android emulator
