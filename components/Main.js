@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {StatusBar} from 'react-native'
+import {StatusBar, BackHandler} from 'react-native'
 
 import {NavigationContainer} from '@react-navigation/native'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
@@ -7,7 +7,7 @@ import {createStackNavigator} from '@react-navigation/stack'
 
 import {useDispatch} from 'react-redux'
 
-import {ModalProvider} from './modals/ModalProvider'
+import {ModalProvider, currentModalState} from './modals/ModalProvider'
 
 import {colors} from '../utils/settings'
 import {menus} from '../utils/navigation'
@@ -20,10 +20,23 @@ export default function Main() {
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(true)
 
+    handleBackButtonClick = () => {
+        var isModalActive = currentModalState && currentModalState.open
+        return isModalActive
+    }
+
     useEffect(() => {
         dispatch(handleGetDecks()).then(() => {
             setIsLoading(false)
         })
+
+        BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick)
+        return () => {
+            BackHandler.removeEventListener(
+                'hardwareBackPress',
+                handleBackButtonClick,
+            )
+        }
     }, [])
 
     return (

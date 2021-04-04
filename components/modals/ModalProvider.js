@@ -12,23 +12,31 @@ const initialModalState = {
     style: undefined,
 }
 
+export let currentModalState = null
+
 export const ModalProvider = ({children}) => {
     const [modalState, setModalState] = useState(initialModalState)
 
     const openModal = (component, style) => {
-        setModalState({
-            open: true,
-            component,
-            style,
+        setModalState(() => {
+            newState = {
+                open: true,
+                component,
+                style,
+            }
+            currentModalState = newState
+            return newState
         })
     }
 
     const closeModal = () =>
         setModalState(state => {
-            return {
+            newState = {
                 ...state,
                 open: false,
             }
+            currentModalState = newState
+            return newState
         })
 
     const modalActions = {
